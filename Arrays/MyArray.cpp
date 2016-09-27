@@ -6,6 +6,7 @@
 MyArray::MyArray(int length)
 {
 	a = new int[length];
+	SetArray();
 }
 
 MyArray::MyArray(MyArray &obj) {
@@ -19,6 +20,19 @@ MyArray::~MyArray()
 {
 	delete[] a;
 	length = 0;
+}
+
+void MyArray::SetArray() {
+	for (int i = 0; i < length; i++)
+		a[i] = rand() % 100;
+}
+
+int MyArray::GetLength() {
+	return length;
+}
+
+int& MyArray::operator[](int index) {
+	return a[index];
 }
 
 void MyArray::BubbleSort() {

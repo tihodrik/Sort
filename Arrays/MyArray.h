@@ -6,7 +6,10 @@ public:
 	MyArray(MyArray&);
 	~MyArray();
 
-	void GetLength();
+	void SetArray();
+	int GetLength();
+
+	int& operator[](int index);
 	
 	// Basic sorts
 	void SelectionSort();
