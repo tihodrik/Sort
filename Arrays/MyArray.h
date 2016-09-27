@@ -3,6 +3,7 @@ class MyArray
 {
 public:
 	MyArray(int length);
+	MyArray(MyArray&);
 	~MyArray();
 
 	void GetLength();
