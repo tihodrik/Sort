@@ -15,7 +15,6 @@ MyArray::MyArray(MyArray &obj) {
 		a[i] = obj.a[i];
 }
 
-
 MyArray::~MyArray()
 {
 	delete[] a;
@@ -48,6 +47,24 @@ void MyArray::InsertionSort() {
 
 			// Вставить текущий элемент
 			a[j] = tmp;
+		}
+	}
+}
+
+void MyArray::SelectionSort() {
+	int minIndex;
+
+	for (int i = 0; i < length - 1; i++) {
+		minIndex = a[i];
+
+		for (int j = i + 1; j < length; j++)
+			if (a[j] < a[minIndex])
+				minIndex = j;
+
+		if (minIndex != i) {
+			int tmp = a[minIndex];
+			a[minIndex] = a[i];
+			a[i] = tmp;
 		}
 	}
 }
