@@ -5,6 +5,7 @@
 
 MyArray::MyArray(int length)
 {
+	this->length = length;
 	a = new int[length];
 	SetArray();
 }
