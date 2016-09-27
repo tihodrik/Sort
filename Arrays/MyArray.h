@@ -10,8 +10,7 @@ public:
 	// Basic sorts
 	void SelectionSort();
 	void InsertionSort();
-	void BubbleSortClassical();
-	void BubbleSortImprooved();
+	void BubbleSort();
 
 	// Sorts, that are based on basic sorts
 	void ShakerSort();

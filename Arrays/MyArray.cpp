@@ -15,7 +15,7 @@ MyArray::~MyArray()
 	length = 0;
 }
 
-void MyArray::BubbleSortClassical() {
+void MyArray::BubbleSort() {
 	int tmp;
 	for (int i = 0; i < length - 1; i++) {
 		for (int j = 0; j < length - i - 1; j++) {
