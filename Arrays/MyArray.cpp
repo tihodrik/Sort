@@ -115,3 +115,28 @@ void MyArray::ShakerSort() {
 		left++;
 	}
 }
+
+void MyArray::ShellSort() {
+	// step == number of groups
+	for (int step = length / 2; step > 0; step /= 2) {
+		for (int k = 0; k < step; k++) {
+			for (int i = k + step; i < length; i += step) {
+				// If wrong order found
+				if (a[i - step] > a[i]) {
+
+					// Write current element
+					int tmp = a[i];
+
+					// Search place to insert. Move all elemets to the right
+					int j = i - step;
+					while (j >= k && a[j] > tmp) {
+						a[j + step] = a[j];
+						j -= step;
+					}
+
+					a[j + step] = tmp;
+				}
+			}
+		}
+	}
+}
