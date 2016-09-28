@@ -38,4 +38,3 @@ private:
 	int* a;
 	int length;
 };
-
