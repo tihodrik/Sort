@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "MyArray.h"
 #include "stdlib.h"
+#include "iostream"
 
+using namespace std;
 
 MyArray::MyArray(int length)
 {
@@ -130,12 +132,35 @@ void MyArray::ShellSort() {
 
 					// Search place to insert. Move all elemets to the right
 					int j = i - step;
-					while (j >= k && a[j] > tmp) {
+					while (j > k && a[j] > tmp) {
 						a[j + step] = a[j];
 						j -= step;
 					}
 
 					a[j + step] = tmp;
+				}
+			}
+		}
+	}
+}
+
+void MyArray::CombSort() {
+	for (int step = int(length / 1.3); step > 0; step = int(step / 1.3)) {
+		if (step == 9 || step == 10)
+			step = 11;
+
+		// Bubble sort for each group
+		for (int k = 0; k < step; k++) {
+			bool sorted = false;
+			for (int i = k; i + step < length && !sorted; i += step) {
+				for (int j = k; j + step < length - i; j += step) {
+					if (a[j] > a[j + step]){
+						int tmp = a[j];
+						a[j] = a[j + step];
+						a[j + step] = tmp;
+					}
+					else
+						sorted = true;
 				}
 			}
 		}
