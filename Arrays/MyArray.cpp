@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "MyArray.h"
 #include "stdlib.h"
-#include "iostream"
 
-using namespace std;
 
 MyArray::MyArray(int length)
 {
