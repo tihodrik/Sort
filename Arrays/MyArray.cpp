@@ -55,7 +55,7 @@ void MyArray::InsertionSort() {
 			
 			// Search place to insert. Move all elemets to the right
 			int j = i - 1;
-			while (j >= 0 && a[j] > tmp) {
+			while (j >= 0 && a[j] >= tmp) {
 				a[j + 1] = a[j];
 				j--;
 			}
@@ -119,6 +119,7 @@ void MyArray::ShakerSort() {
 void MyArray::ShellSort() {
 	// step == number of groups
 	for (int step = length / 2; step > 0; step /= 2) {
+		// Inserton sort
 		for (int k = 0; k < step; k++) {
 			for (int i = k + step; i < length; i += step) {
 				// If wrong order found
