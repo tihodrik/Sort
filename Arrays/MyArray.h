@@ -22,17 +22,10 @@ public:
 	void CombSort(); // Сортировка прочесыванием
 
 	// Quick sorts
-	void QuickSort();
-	void MergeSort();
-	void HeapSort(); // Пирамидальная сортировка
+	void QuickSort(int left, int right);
 
 	// Integer sorts
 	void CountSort();
-	void BlockSort();
-	void RadixSort(); // Распределяющая сортировка = поразрядная сортировка
-
-	// 3rd course sorts
-	void TreeSorts();
 
 private:
 	int* a;
