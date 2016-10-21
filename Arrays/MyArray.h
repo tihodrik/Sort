@@ -23,16 +23,9 @@ public:
 
 	// Quick sorts
 	void QuickSort();
-	void MergeSort();
-	void HeapSort(); // Пирамидальная сортировка
 
 	// Integer sorts
 	void CountSort();
-	void BlockSort();
-	void RadixSort(); // Распределяющая сортировка = поразрядная сортировка
-
-	// 3rd course sorts
-	void TreeSorts();
 
 private:
 	int* a;
