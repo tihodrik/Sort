@@ -21,8 +21,8 @@ public:
 	void ShellSort();
 	void CombSort(); // Сортировка прочесыванием
 
-	// Quick sorts
-	void QuickSort();
+	// Quick sort
+	void QuickSort(int left, int right);
 
 	// Integer sorts
 	void CountSort();
