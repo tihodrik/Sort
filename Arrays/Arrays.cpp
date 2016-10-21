@@ -10,14 +10,14 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	MyArray A(10);
+	MyArray A(6);
 
 	cout << "Init array\n";
 	for (int i = 0; i < A.GetLength(); i++)
 		cout << A[i] << "\t";
 
 	cout << "\n\n";
-	A.ShellSort();
+	A.QuickSort(0, A.GetLength() -1);
 
 	cout << "\n\n";
 	cout << "Sorted array\n";
