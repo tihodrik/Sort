@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "MyArray.h"
 #include "stdlib.h"
+#include "fstream"
+#include "iostream"
+#include "map"
+
+using namespace std;
 
 MyArray::MyArray(int length)
 {
@@ -35,13 +40,22 @@ int  MyArray::GetMin() {
 	}
 	return min;
 }
-int  MyArray::GetMax() {
+int MyArray::GetMax() {
 	int max = a[0];
 	for (int i = 1; i < length; i++) {
 		if (a[i] > max)
 			max = a[i];
 	}
 	return max;
+}
+
+bool MyArray::IsFileEmpty(fstream& f) {
+	f.seekg(0, ios::beg);
+
+	if (f.peek() == EOF)
+		return true;
+
+	return false;
 }
 
 int& MyArray::operator[](int index) {
@@ -204,15 +218,16 @@ void MyArray::QuickSort(int left, int right) {
 	}
 	if (r > left)
 		QuickSort(left, r);
-	if (l+1 < right)
-		QuickSort(l+1, right);
+	if (l + 1 < right)
+		QuickSort(l + 1, right);
 }
 
+// Integer sorts
 void MyArray::CountSort() {
 	int min = GetMin(),
 		max = GetMax(),
 		offset = -1 * min;  // for situation when min != 0
-							// each element of array can be got using the formula: i - offset
+	// each element of array can be got using the formula: i - offset
 
 	int l = max + 1 - min;
 	int* aux = new int[l];
@@ -228,7 +243,99 @@ void MyArray::CountSort() {
 	int i = 0;
 	for (int j = 0; j < l; j++)
 		for (int k = 0; k < aux[j]; k++)
-			a[i++] = j-offset;
+			a[i++] = j - offset;
 
-	delete [] aux;
+	delete[] aux;
+}
+
+// External sort
+void MyArray::MergeSort(string path_f) {
+	fstream f(path_f);
+
+	if (!f)
+		throw "Can't find a file";
+	if (IsFileEmpty(f))
+		throw "File is empty";
+
+	fstream f1("file1.txt");
+	fstream f2("file2.txt");
+
+	map <string, fstream> streams;
+
+	streams.insert(make_pair("file", f));
+	streams.insert(make_pair("file1", f1));
+	streams.insert(make_pair("file2", f2));
+
+	char current, previous;
+
+	while (true) {
+		string current_file = "file1";
+
+		streams["file"] >> previous;
+		streams[current_file] << previous;
+
+		while (streams["file"].peek() != EOF) {
+			streams["file"] >> current;
+
+			if (current < previous) {
+				streams[current_file] << "`";
+
+				if (current_file == "file1")
+					current_file = "file2";
+				else
+					current_file = "file1";
+			}
+
+			streams[current_file] << current;
+			previous = current;
+		}
+
+		streams[current_file] << "`";
+
+		if (IsFileEmpty(f2)) {
+			break;
+		}
+
+		MergeFiles(f, f1, f2);
+	}
+}
+
+void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
+	char current_f1, current_f2;
+
+	while (f1.peek() != EOF || f2.peek() != EOF) {
+		f1 >> current_f1;
+		f2 >> current_f2;
+		do {
+			if (current_f1 <= current_f2) {
+				f << current_f1;
+				f1 >> current_f1;
+			}
+			else {
+				f << current_f2;
+				f2 >> current_f2;
+			}
+		} while (current_f1 != '`' && current_f2 != '`');
+
+		// cur_f1 == `
+		if (current_f1 == '`'){
+			// cur_f1 == ` && cur_f2 !=	`
+			if (current_f2 != '`') {
+				do {
+					f << current_f2;
+					f2 >> current_f2;
+				} while (current_f2 != '`');
+			}
+		}
+		// cur_f1 != `
+		else {
+			// cur_f1 != ` && cur_f2 == `
+			if (current_f2 == '`'){
+				do {
+					f << current_f2;
+					f2 >> current_f2;
+				} while (current_f2 != '`');
+			}
+		}
+	}
 }

@@ -1,4 +1,5 @@
 #pragma once
+
 class MyArray
 {
 public:
@@ -10,6 +11,7 @@ public:
 	int GetLength();
 	int GetMin();
 	int GetMax();
+	bool IsFileEmpty(fstream& f);
 
 	int& operator[](int index);
 	
@@ -28,6 +30,10 @@ public:
 
 	// Integer sorts
 	void CountSort();
+
+	// External sort
+	void MergeSort(string path_f);
+	void MergeFiles(fstream& f, fstream& f1, fstream& f2);
 
 private:
 	int* a;
