@@ -4,25 +4,32 @@
 #include "stdafx.h"
 #include "MyArray.h"
 #include "iostream"
+#include "string"
 
 using namespace std;
 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	MyArray A(6);
+	MyArray A;
 
-	cout << "Init array\n";
+	/*cout << "Init array\n";
 	for (int i = 0; i < A.GetLength(); i++)
 		cout << A[i] << "\t";
 
-	cout << "\n\n";
-	A.CountSort();
+	cout << "\n\n";*/
+	try {
+		A.MergeSort("f.txt");
+	}
+	catch (char* message) {
+		cout << message << endl;
+	}
 
-	cout << "\n\n";
+
+	/*cout << "\n\n";
 	cout << "Sorted array\n";
 	for (int i = 0; i < A.GetLength(); i++)
-		cout << A[i] << "\t";
+		cout << A[i] << "\t";*/
 
 	return 0;
 }

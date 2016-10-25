@@ -13,6 +13,11 @@ MyArray::MyArray(int length)
 	a = new int[length];
 	SetArray();
 }
+
+MyArray::MyArray()
+{
+	length = 0;
+}
 MyArray::MyArray(MyArray &obj) {
 	length = obj.length;
 	a = new int[length];
@@ -21,8 +26,10 @@ MyArray::MyArray(MyArray &obj) {
 }
 MyArray::~MyArray()
 {
-	delete[] a;
-	length = 0;
+	if (length != 0) {
+		delete[] a;
+		length = 0;
+	}
 }
 
 void MyArray::SetArray() {
@@ -260,25 +267,25 @@ void MyArray::MergeSort(string path_f) {
 	fstream f1("file1.txt");
 	fstream f2("file2.txt");
 
-	map <string, fstream> streams;
+	map <string, fstream*> streams;
 
-	streams.insert(make_pair("file", f));
-	streams.insert(make_pair("file1", f1));
-	streams.insert(make_pair("file2", f2));
+	streams.insert(make_pair("file", &f));
+	streams.insert(make_pair("file1", &f1));
+	streams.insert(make_pair("file2", &f2));
 
-	char current, previous;
+	int current, previous;
 
 	while (true) {
 		string current_file = "file1";
 
-		streams["file"] >> previous;
-		streams[current_file] << previous;
+		*streams["file"] >> previous;
+		*streams[current_file] << previous;
 
-		while (streams["file"].peek() != EOF) {
-			streams["file"] >> current;
+		while ((*streams["file"]).peek() != EOF) {
+			*streams["file"] >> current;
 
 			if (current < previous) {
-				streams[current_file] << "`";
+				*streams[current_file] << "`";
 
 				if (current_file == "file1")
 					current_file = "file2";
@@ -286,56 +293,60 @@ void MyArray::MergeSort(string path_f) {
 					current_file = "file1";
 			}
 
-			streams[current_file] << current;
+			*streams[current_file] << current;
 			previous = current;
 		}
 
-		streams[current_file] << "`";
+		*streams[current_file] << "`";
 
 		if (IsFileEmpty(f2)) {
 			break;
 		}
 
-		MergeFiles(f, f1, f2);
+		//MergeFiles(f, f1, f2);
 	}
+
+	f.close();
+	f1.close();
+	f2.close();
 }
 
-void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
-	char current_f1, current_f2;
-
-	while (f1.peek() != EOF || f2.peek() != EOF) {
-		f1 >> current_f1;
-		f2 >> current_f2;
-		do {
-			if (current_f1 <= current_f2) {
-				f << current_f1;
-				f1 >> current_f1;
-			}
-			else {
-				f << current_f2;
-				f2 >> current_f2;
-			}
-		} while (current_f1 != '`' && current_f2 != '`');
-
-		// cur_f1 == `
-		if (current_f1 == '`'){
-			// cur_f1 == ` && cur_f2 !=	`
-			if (current_f2 != '`') {
-				do {
-					f << current_f2;
-					f2 >> current_f2;
-				} while (current_f2 != '`');
-			}
-		}
-		// cur_f1 != `
-		else {
-			// cur_f1 != ` && cur_f2 == `
-			if (current_f2 == '`'){
-				do {
-					f << current_f2;
-					f2 >> current_f2;
-				} while (current_f2 != '`');
-			}
-		}
-	}
-}
+//void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
+//	char current_f1, current_f2;
+//
+//	while (f1.peek() != EOF || f2.peek() != EOF) {
+//		f1 >> current_f1;
+//		f2 >> current_f2;
+//		do {
+//			if (current_f1 <= current_f2) {
+//				f << current_f1;
+//				f1 >> current_f1;
+//			}
+//			else {
+//				f << current_f2;
+//				f2 >> current_f2;
+//			}
+//		} while (current_f1 != '`' && current_f2 != '`');
+//
+//		// cur_f1 == `
+//		if (current_f1 == '`'){
+//			// cur_f1 == ` && cur_f2 !=	`
+//			if (current_f2 != '`') {
+//				do {
+//					f << current_f2;
+//					f2 >> current_f2;
+//				} while (current_f2 != '`');
+//			}
+//		}
+//		// cur_f1 != `
+//		else {
+//			// cur_f1 != ` && cur_f2 == `
+//			if (current_f2 == '`'){
+//				do {
+//					f << current_f2;
+//					f2 >> current_f2;
+//				} while (current_f2 != '`');
+//			}
+//		}
+//	}
+//}

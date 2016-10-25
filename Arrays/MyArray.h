@@ -1,10 +1,15 @@
 #pragma once
+#include "string"
+#include "fstream"
+#include "iostream"
 
+using namespace std;
 class MyArray
 {
 public:
 	MyArray(int length);
 	MyArray(MyArray&);
+	MyArray();
 	~MyArray();
 
 	void SetArray();
@@ -33,7 +38,7 @@ public:
 
 	// External sort
 	void MergeSort(string path_f);
-	void MergeFiles(fstream& f, fstream& f1, fstream& f2);
+	//void MergeFiles(fstream& f, fstream& f1, fstream& f2);
 
 private:
 	int* a;
