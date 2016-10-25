@@ -19,7 +19,7 @@ public:
 	// Sorts, that are based on basic sorts
 	void ShakerSort();
 	void ShellSort();
-	void CombSort(); // Сортировка прочесыванием
+	void CombSort();
 
 	// Quick sort
 	void QuickSort(int left, int right);

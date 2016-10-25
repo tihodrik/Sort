@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "MyArray.h"
 #include "stdlib.h"
+#include "iostream"
+
+using namespace std;
 
 
 MyArray::MyArray(int length)
@@ -52,7 +55,7 @@ void MyArray::InsertionSort() {
 
 			// Write current element
 			int tmp = a[i];
-			
+
 			// Search place to insert. Move all elemets to the right
 			int j = i - 1;
 			while (j >= 0 && a[j] >= tmp) {
@@ -121,6 +124,11 @@ void MyArray::ShellSort() {
 	for (int step = length / 2; step > 0; step /= 2) {
 		// Inserton sort
 		for (int k = 0; k < step; k++) {
+			cout << "group: " << k << "\n";
+			cout << "elements (before): ";
+			for (int i = k; i < length; i += step)
+				cout << a[i] << "\t";
+			cout << "\n\n";
 			for (int i = k + step; i < length; i += step) {
 				// If wrong order found
 				if (a[i - step] > a[i]) {
@@ -130,7 +138,7 @@ void MyArray::ShellSort() {
 
 					// Search place to insert. Move all elemets to the right
 					int j = i - step;
-					while (j > k && a[j] > tmp) {
+					while (j >= k && a[j] > tmp) {
 						a[j + step] = a[j];
 						j -= step;
 					}
@@ -138,6 +146,11 @@ void MyArray::ShellSort() {
 					a[j + step] = tmp;
 				}
 			}
+			cout << "group: " << k << "\n";
+			cout << "elements (after): ";
+			for (int i = k; i < length; i += step)
+				cout << a[i] << "\t";
+			cout << "\n\n";
 		}
 	}
 }
@@ -165,28 +178,28 @@ void MyArray::CombSort() {
 	}
 }
 
-// Quick sort
+// Quick sorts
 void MyArray::QuickSort(int left, int right) {
-	int l = left, r = right,
-		m = (int)( (l + r) / 2 );
-	int tmp;
-
+	int l = left, r = right;
+	int mid = a[(int)((r + l) / 2)];
 	while (l < r) {
-		while (a[l] < a[m])
+		while (a[l] < mid)
 			l++;
-		while (a[r] > a[m])
+		while (a[r] > mid)
 			r--;
 
-		if (l <= r) {
-			tmp = a[l];
+		//swap
+		if (l < r) {
+			int tmp = a[l];
 			a[l] = a[r];
 			a[r] = tmp;
-			r--;
+
 			l++;
+			r--;
 		}
 	}
 	if (r > left)
 		QuickSort(left, r);
-	if (l < right)
-		QuickSort(l, right);
+	if (l+1 < right)
+		QuickSort(l+1, right);
 }
