@@ -8,11 +8,12 @@ class MyArray
 {
 public:
 	MyArray(int length);
-	MyArray(MyArray&);
+	MyArray(const MyArray&);
 	MyArray();
 	~MyArray();
 
 	void SetArray();
+	void SetArray(int []);
 	int GetLength();
 	int GetMin();
 	int GetMax();

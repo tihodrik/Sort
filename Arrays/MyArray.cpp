@@ -11,14 +11,13 @@ MyArray::MyArray(int length)
 {
 	this->length = length;
 	a = new int[length];
-	SetArray();
 }
 
 MyArray::MyArray()
 {
 	length = 0;
 }
-MyArray::MyArray(MyArray &obj) {
+MyArray::MyArray(const MyArray& obj) {
 	length = obj.length;
 	a = new int[length];
 	for (int i = 0; i < length; i++)
@@ -36,6 +35,12 @@ void MyArray::SetArray() {
 	for (int i = 0; i < length; i++)
 		a[i] = rand() % 100;
 }
+
+void MyArray::SetArray(int arr[]) {
+	for (int i = 0; i < length; i++)
+		a[i] = arr[i];
+}
+
 int MyArray::GetLength() {
 	return length;
 }
@@ -256,60 +261,60 @@ void MyArray::CountSort() {
 }
 
 // External sort
-void MyArray::MergeSort(string path_f) {
-	fstream f(path_f);
-
-	if (!f)
-		throw "Can't find a file";
-	if (IsFileEmpty(f))
-		throw "File is empty";
-
-	fstream f1("file1.txt");
-	fstream f2("file2.txt");
-
-	map <string, fstream*> streams;
-
-	streams.insert(make_pair("file", &f));
-	streams.insert(make_pair("file1", &f1));
-	streams.insert(make_pair("file2", &f2));
-
-	int current, previous;
-
-	while (true) {
-		string current_file = "file1";
-
-		*streams["file"] >> previous;
-		*streams[current_file] << previous;
-
-		while ((*streams["file"]).peek() != EOF) {
-			*streams["file"] >> current;
-
-			if (current < previous) {
-				*streams[current_file] << "`";
-
-				if (current_file == "file1")
-					current_file = "file2";
-				else
-					current_file = "file1";
-			}
-
-			*streams[current_file] << current;
-			previous = current;
-		}
-
-		*streams[current_file] << "`";
-
-		if (IsFileEmpty(f2)) {
-			break;
-		}
-
-		//MergeFiles(f, f1, f2);
-	}
-
-	f.close();
-	f1.close();
-	f2.close();
-}
+//void MyArray::MergeSort(string path_f) {
+//	fstream f(path_f);
+//
+//	if (!f)
+//		throw "Can't find a file";
+//	if (IsFileEmpty(f))
+//		throw "File is empty";
+//
+//	fstream f1("file1.txt");
+//	fstream f2("file2.txt");
+//
+//	map <string, fstream*> streams;
+//
+//	streams.insert(make_pair("file", &f));
+//	streams.insert(make_pair("file1", &f1));
+//	streams.insert(make_pair("file2", &f2));
+//
+//	int current, previous;
+//
+//	while (true) {
+//		string current_file = "file1";
+//
+//		*streams["file"] >> previous;
+//		*streams[current_file] << previous;
+//
+//		while ((*streams["file"]).peek() != EOF) {
+//			*streams["file"] >> current;
+//
+//			if (current < previous) {
+//				*streams[current_file] << "`";
+//
+//				if (current_file == "file1")
+//					current_file = "file2";
+//				else
+//					current_file = "file1";
+//			}
+//
+//			*streams[current_file] << current;
+//			previous = current;
+//		}
+//
+//		*streams[current_file] << "`";
+//
+//		if (IsFileEmpty(f2)) {
+//			break;
+//		}
+//
+//		//MergeFiles(f, f1, f2);
+//	}
+//
+//	f.close();
+//	f1.close();
+//	f2.close();
+//}
 
 //void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
 //	char current_f1, current_f2;
