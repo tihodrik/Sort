@@ -17,7 +17,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		cout << A[i] << "\t";
 
 	cout << "\n\n";
-	A.QuickSort(0, A.GetLength() -1);
+	A.CountSort();
 
 	cout << "\n\n";
 	cout << "Sorted array\n";

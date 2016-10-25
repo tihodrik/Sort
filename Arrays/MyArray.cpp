@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "MyArray.h"
 #include "stdlib.h"
-#include "iostream"
-
-using namespace std;
-
 
 MyArray::MyArray(int length)
 {
@@ -30,6 +26,22 @@ void MyArray::SetArray() {
 }
 int MyArray::GetLength() {
 	return length;
+}
+int  MyArray::GetMin() {
+	int min = a[0];
+	for (int i = 1; i < length; i++) {
+		if (a[i] < min)
+			min = a[i];
+	}
+	return min;
+}
+int  MyArray::GetMax() {
+	int max = a[0];
+	for (int i = 1; i < length; i++) {
+		if (a[i] > max)
+			max = a[i];
+	}
+	return max;
 }
 
 int& MyArray::operator[](int index) {
@@ -80,6 +92,8 @@ void MyArray::SelectionSort() {
 				minIndex = j;
 		}
 
+		// if (the element that has een chosen in the very begining is already minimal)
+		// the condition is written in order to not change the element with itself
 		if (minIndex != i) {
 			int tmp = a[minIndex];
 			a[minIndex] = a[i];
@@ -96,6 +110,7 @@ void MyArray::ShakerSort() {
 		sortable = false;
 
 		// towards
+		// the biggest element is the last now
 		for (int i = 0; i < right; i++) {
 			if (a[i] > a[i + 1]) {
 				int tmp = a[i + 1];
@@ -107,6 +122,7 @@ void MyArray::ShakerSort() {
 		right--;
 
 		// backward
+		// the smallest element is the first now
 		for (int i = right; i > left; i--) {
 			if (a[i] < a[i - 1]) {
 				int tmp = a[i];
@@ -124,16 +140,9 @@ void MyArray::ShellSort() {
 	for (int step = length / 2; step > 0; step /= 2) {
 		// Inserton sort
 		for (int k = 0; k < step; k++) {
-			cout << "group: " << k << "\n";
-			cout << "elements (before): ";
-			for (int i = k; i < length; i += step)
-				cout << a[i] << "\t";
-			cout << "\n\n";
 			for (int i = k + step; i < length; i += step) {
 				// If wrong order found
 				if (a[i - step] > a[i]) {
-
-					// Write current element
 					int tmp = a[i];
 
 					// Search place to insert. Move all elemets to the right
@@ -146,11 +155,6 @@ void MyArray::ShellSort() {
 					a[j + step] = tmp;
 				}
 			}
-			cout << "group: " << k << "\n";
-			cout << "elements (after): ";
-			for (int i = k; i < length; i += step)
-				cout << a[i] << "\t";
-			cout << "\n\n";
 		}
 	}
 }
@@ -181,7 +185,7 @@ void MyArray::CombSort() {
 // Quick sorts
 void MyArray::QuickSort(int left, int right) {
 	int l = left, r = right;
-	int mid = a[(int)((r + l) / 2)];
+	int mid = a[int((r + l) / 2)];
 	while (l < r) {
 		while (a[l] < mid)
 			l++;
@@ -202,4 +206,29 @@ void MyArray::QuickSort(int left, int right) {
 		QuickSort(left, r);
 	if (l+1 < right)
 		QuickSort(l+1, right);
+}
+
+void MyArray::CountSort() {
+	int min = GetMin(),
+		max = GetMax(),
+		offset = -1 * min;  // for situation when min != 0
+							// each element of array can be got using the formula: i - offset
+
+	int l = max + 1 - min;
+	int* aux = new int[l];
+
+	for (int i = 0; i < l; i++) {
+		aux[i] = 0;
+	}
+
+	for (int i = 0; i < length; i++) {
+		aux[a[i] + offset]++;
+	}
+
+	int i = 0;
+	for (int j = 0; j < l; j++)
+		for (int k = 0; k < aux[j]; k++)
+			a[i++] = j-offset;
+
+	delete [] aux;
 }

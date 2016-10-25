@@ -8,6 +8,8 @@ public:
 
 	void SetArray();
 	int GetLength();
+	int GetMin();
+	int GetMax();
 
 	int& operator[](int index);
 	
