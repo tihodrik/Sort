@@ -8,7 +8,7 @@ class MyArray
 {
 public:
 	MyArray(int length);
-	MyArray(const MyArray&);
+	MyArray(const MyArray& object);
 	MyArray();
 	~MyArray();
 
@@ -20,6 +20,7 @@ public:
 	bool IsFileEmpty(fstream& f);
 
 	int& operator[](int index);
+	void operator()(const MyArray& object);
 	
 	// Basic sorts
 	void SelectionSort();

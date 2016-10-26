@@ -11,72 +11,70 @@
 
 using namespace std;
 
-void PrintSorts();
-void PrintArray(MyArray& arr);
+void PrintMenu();
+void PrintArray(MyArray& a, char* text, char agreement);
+
 MyArray Create();
 long GetTime(clock_t);
 
 //—Œ–“»–Œ¬ »
-void Selection(MyArray * array);
-void Insertion(MyArray * array);
-void Bubble(MyArray * array);
-void Shaker(MyArray * array);
-void Shell(MyArray * array);
-void Comb(MyArray * array);
-void Count(MyArray * array);
-void Quick(MyArray * array);
+void SelectionWrapper(MyArray * array);
+void InsertionWrapper(MyArray * array);
+void BubbleWrapper(MyArray * array);
+void ShakerWrapper(MyArray * array);
+void ShellWrapper(MyArray * array);
+void CombWrapper(MyArray * array);
+void CountWrapper(MyArray * array);
+void QuickWrapper(MyArray * array);
 
 typedef void(*SORT)(MyArray*);
+bool silent_mode = false;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	int answer;
-	//bool silent_mode = true;
 	clock_t time;
 	MyArray A = Create();
 
 	map <int, SORT> sort;
-	sort.insert(make_pair(1, Selection));
-	sort.insert(make_pair(2, Insertion));
-	sort.insert(make_pair(3, Bubble));
-	sort.insert(make_pair(4, Shaker));
-	sort.insert(make_pair(5, Shell));
-	sort.insert(make_pair(6, Comb));
-	sort.insert(make_pair(7, Quick));
-	sort.insert(make_pair(8, Count));
+	sort.insert(make_pair(1, SelectionWrapper));
+	sort.insert(make_pair(2, InsertionWrapper));
+	sort.insert(make_pair(3, BubbleWrapper));
+	sort.insert(make_pair(4, ShakerWrapper));
+	sort.insert(make_pair(5, ShellWrapper));
+	sort.insert(make_pair(6, CombWrapper));
+	sort.insert(make_pair(7, QuickWrapper));
+	sort.insert(make_pair(8, CountWrapper));
 
 	while (true) {
-		MyArray B(A);
-
-		fflush(stdin);
-
-		PrintSorts();
+		PrintMenu();
 
 		cout << "Answer: ";
-		answer = _getch() - '0';
+		cin >> answer;
 
 		if (answer > 0 && answer < 9){
+			MyArray B(A);
 			system("cls");
-			fflush(stdin);
 
-			cout << "Would you like to look at the init array? (y/any other)";
-			if (_getch() == 'y'){
-				PrintArray(B);
-				_getch();
+			if (!silent_mode) {
+				PrintArray(B, "Would you like to look at the init array? (y/any other) ", 'y');
 			}
-
+	
 			time = clock();
 			sort[answer](&B);
+			
 			cout << "\nTime: " << GetTime(time) << " ticks\n\n";
+			_getch();
 
-			cout << "Would you like to look at the result array? (y/any other)";
-			if (_getch() == 'y'){
-				PrintArray(B);
-				_getch();
+			if (!silent_mode){
+				PrintArray(B, "Would you like to look at the result array? (y/any other) ", 'y');
 			}
 		}
 		if (!answer) {
 			return 0;
+		}
+		if (answer == 10) {
+			A(Create());
 		}
 	}
 	return 0;
@@ -90,7 +88,7 @@ int _tmain(int argc, _TCHAR* argv[])
 //	cout << "\n\n";
 //}
 
-void PrintSorts() {
+void PrintMenu() {
 	system("cls");
 	cout << "Enter:\n\n"
 		<< "1 - SelectionSort\n"
@@ -102,9 +100,12 @@ void PrintSorts() {
 		<< "7 - QuickSort\n"
 		<< "8 - CountSort\n\n"
 
+		<< "10 - to renew array\n"
 		<< "0 - to exit\n\n";
 }
 MyArray Create() {
+	system("cls");
+
 	int length;
 	bool randomly;
 
@@ -120,6 +121,11 @@ MyArray Create() {
 
 	cout << "Enter length: ";
 	cin >> length;
+
+	if (length > 100)
+		silent_mode = true;
+	else
+		silent_mode = true;
 
 	MyArray array(length);
 
@@ -139,35 +145,43 @@ MyArray Create() {
 long GetTime(clock_t time) {
 	return clock() - time;
 }
-void PrintArray(MyArray& a) {
-	cout << "\n\nBEGIN\n\n";
-	for (int i = 0; i < a.GetLength(); i++)
-		cout << a[i] << "\t";
+void PrintArray(MyArray& a, char* text, char agreement) {
+	fflush(stdin);
 
-	cout << "\nEND\n\n";
+	cout << text;
+	if (_getch() == agreement) {
+
+		cout << "\n\nBEGIN\n\n";
+		for (int i = 0; i < a.GetLength(); i++)
+			cout << a[i] << "\t";
+
+		cout << "\nEND\n\n";
+
+		_getch();
+	}
 }
 
-void Selection(MyArray * array) {
+void SelectionWrapper(MyArray * array) {
 	array->SelectionSort();
 }
-void Insertion(MyArray * array) {
+void InsertionWrapper(MyArray * array) {
 	array->InsertionSort();
 }
-void Bubble(MyArray * array) {
+void BubbleWrapper(MyArray * array) {
 	array->BubbleSort();
 }
-void Shaker(MyArray * array) {
+void ShakerWrapper(MyArray * array) {
 	array->ShakerSort();
 }
-void Shell(MyArray * array) {
+void ShellWrapper(MyArray * array) {
 	array->ShellSort();
 }
-void Comb(MyArray * array) {
+void CombWrapper(MyArray * array) {
 	array->CombSort();
 }
-void Count(MyArray * array) {
+void CountWrapper(MyArray * array) {
 	array->CountSort();
 }
-void Quick(MyArray * array) {
+void QuickWrapper(MyArray * array) {
 	array->QuickSort(0, array->GetLength() - 1);
 }

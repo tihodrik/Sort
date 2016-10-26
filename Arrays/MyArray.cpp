@@ -17,11 +17,11 @@ MyArray::MyArray()
 {
 	length = 0;
 }
-MyArray::MyArray(const MyArray& obj) {
-	length = obj.length;
+MyArray::MyArray(const MyArray& object) {
+	length = object.length;
 	a = new int[length];
 	for (int i = 0; i < length; i++)
-		a[i] = obj.a[i];
+		a[i] = object.a[i];
 }
 MyArray::~MyArray()
 {
@@ -72,6 +72,15 @@ bool MyArray::IsFileEmpty(fstream& f) {
 
 int& MyArray::operator[](int index) {
 	return a[index];
+}
+
+void MyArray::operator()(const MyArray& object) {
+	delete [] a;
+
+	length = object.length;
+	a = new int[length];
+	for (int i = 0; i < length; i++)
+		a[i] = object.a[i];
 }
 
 // Basic sorts
