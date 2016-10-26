@@ -77,6 +77,10 @@ int _tmain(int argc, _TCHAR* argv[])
 			A(Create());
 		}
 	}
+
+	/*MyArray A(1);
+
+	A.MergeSort("file.txt");*/
 	return 0;
 }
 //cout << "\n\n";

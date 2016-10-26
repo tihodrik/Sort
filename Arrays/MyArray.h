@@ -39,8 +39,13 @@ public:
 	void CountSort();
 
 	// External sort
+	//void OpenStreams(string path_f, map<string, fstream*>& streams);
+	// CloseStreams(map<string, fstream*>& streams);
+
+	bool EndRange(fstream& stream);
 	void MergeSort(string path_f);
-	//void MergeFiles(fstream& f, fstream& f1, fstream& f2);
+	void MergeFiles(fstream& f, fstream& f1, fstream& f2);
+	
 
 private:
 	int* a;

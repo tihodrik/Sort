@@ -75,7 +75,7 @@ int& MyArray::operator[](int index) {
 }
 
 void MyArray::operator()(const MyArray& object) {
-	delete [] a;
+	delete[] a;
 
 	length = object.length;
 	a = new int[length];
@@ -271,15 +271,9 @@ void MyArray::CountSort() {
 	delete[] aux;
 }
 
-// External sort
-//void MyArray::MergeSort(string path_f) {
+//External sort
+//void MyArray::OpenStreams(string path_f, map<string, fstream*>& streams) {
 //	fstream f(path_f);
-//
-//	if (!f)
-//		throw "Can't find a file";
-//	if (IsFileEmpty(f))
-//		throw "File is empty";
-//
 //	fstream f1("file1.txt");
 //	fstream f2("file2.txt");
 //
@@ -288,81 +282,174 @@ void MyArray::CountSort() {
 //	streams.insert(make_pair("file", &f));
 //	streams.insert(make_pair("file1", &f1));
 //	streams.insert(make_pair("file2", &f2));
+//}
 //
-//	int current, previous;
-//
-//	while (true) {
-//		string current_file = "file1";
-//
-//		*streams["file"] >> previous;
-//		*streams[current_file] << previous;
-//
-//		while ((*streams["file"]).peek() != EOF) {
-//			*streams["file"] >> current;
-//
-//			if (current < previous) {
-//				*streams[current_file] << "`";
-//
-//				if (current_file == "file1")
-//					current_file = "file2";
-//				else
-//					current_file = "file1";
-//			}
-//
-//			*streams[current_file] << current;
-//			previous = current;
-//		}
-//
-//		*streams[current_file] << "`";
-//
-//		if (IsFileEmpty(f2)) {
-//			break;
-//		}
-//
-//		//MergeFiles(f, f1, f2);
+//void MyArray::CloseStreams(map<string, fstream*>& streams) {
+//	for each (pair <string, fstream*> st in streams) {
+//		st.second->close();
 //	}
-//
-//	f.close();
-//	f1.close();
-//	f2.close();
 //}
 
-//void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
-//	char current_f1, current_f2;
-//
-//	while (f1.peek() != EOF || f2.peek() != EOF) {
-//		f1 >> current_f1;
-//		f2 >> current_f2;
-//		do {
-//			if (current_f1 <= current_f2) {
-//				f << current_f1;
-//				f1 >> current_f1;
-//			}
-//			else {
-//				f << current_f2;
-//				f2 >> current_f2;
-//			}
-//		} while (current_f1 != '`' && current_f2 != '`');
-//
-//		// cur_f1 == `
-//		if (current_f1 == '`'){
-//			// cur_f1 == ` && cur_f2 !=	`
-//			if (current_f2 != '`') {
-//				do {
-//					f << current_f2;
-//					f2 >> current_f2;
-//				} while (current_f2 != '`');
-//			}
-//		}
-//		// cur_f1 != `
-//		else {
-//			// cur_f1 != ` && cur_f2 == `
-//			if (current_f2 == '`'){
-//				do {
-//					f << current_f2;
-//					f2 >> current_f2;
-//				} while (current_f2 != '`');
-//			}
-//		}
-//	}
-//}
+bool MyArray::EndRange(fstream& stream) {
+	char symbol;
+	stream.seekg(1, ios_base::cur);
+
+	symbol = char(stream.peek());
+
+	stream.seekg(-1, ios_base::cur);
+
+	if (symbol == '`') {
+		return true;
+	}
+	return false;
+}
+
+void MyArray::MergeSort(string path_f) { // protection of not opened files
+	int current, previous;
+
+	while (true) {
+		fstream f(path_f, ios::in);
+		fstream f1("file1.txt", ios::out, ios::trunc);
+		fstream f2("file2.txt", ios::out, ios::trunc);
+
+		map <string, fstream*> streams;
+
+		streams.insert(make_pair("file", &f));
+		streams.insert(make_pair("file1", &f1));
+		streams.insert(make_pair("file2", &f2));
+
+		for each (pair<string, fstream*> st in streams) {
+			if (!(st.second->is_open()))
+				throw "Can't open a file";
+		}
+
+		string current_file = "file1";
+
+		*streams["file"] >> previous;
+		*streams[current_file] << previous << " ";
+
+		while ((*streams["file"]).peek() != EOF) {
+			*streams["file"] >> current;
+
+			if (current < previous) {
+				*streams[current_file] << "` ";
+
+				if (current_file == "file1")
+					current_file = "file2";
+				else
+					current_file = "file1";
+			}
+
+			*streams[current_file] << current << " ";
+			previous = current;
+		}
+
+		*streams[current_file] << "` ";
+
+		streams["file"]->close();
+		streams["file1"]->close();
+		streams["file2"]->close();
+
+		f2.open("file2.txt", ios::in);
+		if (IsFileEmpty(*streams["file2"])) {
+			break;
+		}
+
+		f.open(path_f, ios::out);
+		f1.open("file1.txt", ios::in);
+
+		MergeFiles(f, f1, f2);
+
+		streams["file"]->close();
+		streams["file1"]->close();
+		streams["file2"]->close();
+	}
+	remove("file1.txt");
+	remove("file2.txt");
+}
+
+void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
+	int current_f1, current_f2;
+	bool written_f1, written_f2;
+
+	while (f1.peek() != EOF && f2.peek() != EOF) {
+		// begining of the new range
+		f1 >> current_f1;
+		written_f1 = false;
+
+		f2 >> current_f2;
+		written_f2 = false;
+
+		while (true) {
+			if (current_f1 <= current_f2) {
+				f << current_f1 << " ";
+				written_f1 = true;
+				if (EndRange(f1)) {
+					break;
+				}
+				f1 >> current_f1;
+				written_f1 = false;
+			}
+			else {
+				f << current_f2 << " ";
+				written_f2 = true;
+				if (EndRange(f2)) {
+					break;
+				}
+				f2 >> current_f2;
+				written_f2 = false;
+			}
+		}
+
+		// write if exists smt to write (for current range) 
+		// notice if f1 or f2 is written or not - optional
+
+		if (!written_f2) {
+			while (true) {
+				f << current_f2 << " ";
+				if (EndRange(f2))
+					break;
+				f2 >> current_f2;
+			}
+		}
+		
+		if (!written_f1) {
+			while (true) {
+				f << current_f1 << " ";
+				if (EndRange(f1))
+					break;
+				f1 >> current_f1;
+			}
+		}
+
+
+		// and go to the next range
+		f1.seekg(3, ios_base::cur);
+		f2.seekg(3, ios_base::cur);
+	}
+
+	if (f1.peek() != EOF) {
+		while (f1.peek() != EOF){
+			while (true) {
+				f << current_f1 << " ";
+				if (EndRange(f1))
+					break;
+				f1 >> current_f1;
+			}
+			f1.seekg(3, ios_base::cur); // skip " ` "
+		}
+	}
+
+	if (f2.peek() != EOF) {
+		while (f2.peek() != EOF){
+			while (true) {
+				f << current_f2 << " ";
+				if (EndRange(f2))
+					break;
+				f2 >> current_f2;
+			}
+			f2.seekg(3, ios_base::cur); // skip " ` "
+		}
+	}
+}
+
