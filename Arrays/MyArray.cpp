@@ -212,17 +212,19 @@ void MyArray::CombSort() {
 void MyArray::QuickSort(int left, int right) {
 	int l = left, r = right;
 	int mid = a[int((r + l) / 2)];
-	while (l < r) {
+	while (l <= r) {
 		while (a[l] < mid)
 			l++;
 		while (a[r] > mid)
 			r--;
 
 		//swap
-		if (l < r) {
-			int tmp = a[l];
-			a[l] = a[r];
-			a[r] = tmp;
+		if (l <= r) {
+			if (l < r){
+				int tmp = a[l];
+				a[l] = a[r];
+				a[r] = tmp;
+			}
 
 			l++;
 			r--;
@@ -230,8 +232,8 @@ void MyArray::QuickSort(int left, int right) {
 	}
 	if (r > left)
 		QuickSort(left, r);
-	if (l + 1 < right)
-		QuickSort(l + 1, right);
+	if (l < right)
+		QuickSort(l, right);
 }
 
 // Integer sorts
