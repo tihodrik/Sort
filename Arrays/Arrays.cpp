@@ -63,7 +63,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			time = clock();
 			sort[answer](&B);
 			
-			cout << "\nTime: " << GetTime(time) << " ticks\n\n";
+			cout << "\nTime: " << clock() - time << " ticks\n\n";
 			_getch();
 
 			if (!silent_mode){
@@ -129,7 +129,7 @@ MyArray Create() {
 	if (length > 100)
 		silent_mode = true;
 	else
-		silent_mode = true;
+		silent_mode = false;
 
 	MyArray array(length);
 

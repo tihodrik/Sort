@@ -33,7 +33,7 @@ MyArray::~MyArray()
 
 void MyArray::SetArray() {
 	for (int i = 0; i < length; i++)
-		a[i] = rand() % 100;
+		a[i] = rand() % 1000;
 }
 
 void MyArray::SetArray(int arr[]) {
@@ -116,7 +116,7 @@ void MyArray::InsertionSort() {
 		}
 	}
 }
-void MyArray::SelectionSort() {
+void MyArray::SelectionSort() { // modify
 	int minIndex;
 
 	for (int i = 0; i < length - 1; i++) {
@@ -138,7 +138,7 @@ void MyArray::SelectionSort() {
 }
 
 // Sorts, that are based on basic sorts
-void MyArray::ShakerSort() {
+void MyArray::ShakerSort() { //modify
 	int left = 0, right = length - 1;
 	bool sortable = true;
 	while (left < right && sortable) {
