@@ -17,7 +17,6 @@ public:
 	int GetLength();
 	int GetMin();
 	int GetMax();
-	bool IsFileEmpty(fstream& f);
 
 	int& operator[](int index);
 	void operator()(const MyArray& object);
@@ -39,10 +38,10 @@ public:
 	void CountSort();
 
 	// External sort
-	//void OpenStreams(string path_f, map<string, fstream*>& streams);
-	// CloseStreams(map<string, fstream*>& streams);
-
 	bool EndRange(fstream& stream);
+	bool IsFileEmpty(fstream& f);
+	bool IsFileEnd(fstream& f);
+
 	void MergeSort(string path_f);
 	void MergeFiles(fstream& f, fstream& f1, fstream& f2);
 	

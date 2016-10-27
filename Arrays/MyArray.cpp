@@ -91,7 +91,7 @@ void MyArray::BubbleSort() {
 					if (a[j] > a[indexTmp])
 						break;
 				}
-					
+
 				tmp = a[indexTmp];
 				a[indexTmp] = a[j - 1];
 				a[j - 1] = tmp;
@@ -149,7 +149,7 @@ void MyArray::InsertionSort() { // modified
 				}
 
 				for (int j = i - 1; j >= mid; j--)
-					a[j+1] = a[j];
+					a[j + 1] = a[j];
 
 				a[mid] = tmp;
 			}
@@ -323,24 +323,6 @@ void MyArray::CountSort() {
 }
 
 //External sort
-//void MyArray::OpenStreams(string path_f, map<string, fstream*>& streams) {
-//	fstream f(path_f);
-//	fstream f1("file1.txt");
-//	fstream f2("file2.txt");
-//
-//	map <string, fstream*> streams;
-//
-//	streams.insert(make_pair("file", &f));
-//	streams.insert(make_pair("file1", &f1));
-//	streams.insert(make_pair("file2", &f2));
-//}
-//
-//void MyArray::CloseStreams(map<string, fstream*>& streams) {
-//	for each (pair <string, fstream*> st in streams) {
-//		st.second->close();
-//	}
-//}
-
 bool MyArray::EndRange(fstream& stream) {
 	char symbol;
 	stream.seekg(1, ios_base::cur);
@@ -354,6 +336,27 @@ bool MyArray::EndRange(fstream& stream) {
 	}
 	return false;
 }
+bool MyArray::IsFileEmpty(fstream& f) {
+	f.seekg(0, ios::beg);
+
+	if (f.peek() == EOF)
+		return true;
+
+	return false;
+}
+bool MyArray::IsFileEnd(fstream& f) {
+	bool end = false;
+
+	f.seekg(1, ios_base::cur);
+
+	if (f.peek() == EOF)
+		end = true;
+
+	f.seekg(-1, ios_base::cur);
+
+	return end;
+}
+
 
 void MyArray::MergeSort(string path_f) { // protection of not opened files
 	int current, previous;
@@ -379,7 +382,7 @@ void MyArray::MergeSort(string path_f) { // protection of not opened files
 		*streams["file"] >> previous;
 		*streams[current_file] << previous << " ";
 
-		while ((*streams["file"]).peek() != EOF) {
+		while (!IsFileEnd(*streams["file"])) {
 			*streams["file"] >> current;
 
 			if (current < previous) {
@@ -403,6 +406,7 @@ void MyArray::MergeSort(string path_f) { // protection of not opened files
 
 		f2.open("file2.txt", ios::in);
 		if (IsFileEmpty(*streams["file2"])) {
+			f2.close();
 			break;
 		}
 
@@ -418,12 +422,11 @@ void MyArray::MergeSort(string path_f) { // protection of not opened files
 	remove("file1.txt");
 	remove("file2.txt");
 }
-
 void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
 	int current_f1, current_f2;
 	bool written_f1, written_f2;
 
-	while (f1.peek() != EOF && f2.peek() != EOF) {
+	while (!IsFileEnd(f1) && !IsFileEnd(f2)) {
 		// begining of the new range
 		f1 >> current_f1;
 		written_f1 = false;
@@ -479,8 +482,9 @@ void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
 		f2.seekg(3, ios_base::cur);
 	}
 
-	if (f1.peek() != EOF) {
-		while (f1.peek() != EOF){
+	if (!IsFileEnd(f1)) {
+		while (!IsFileEnd(f1)){
+			f1 >> current_f1;
 			while (true) {
 				f << current_f1 << " ";
 				if (EndRange(f1))
@@ -491,8 +495,9 @@ void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
 		}
 	}
 
-	if (f2.peek() != EOF) {
-		while (f2.peek() != EOF){
+	if (!IsFileEnd(f2)) {
+		while (!IsFileEnd(f2)){
+			f2 >> current_f2;
 			while (true) {
 				f << current_f2 << " ";
 				if (EndRange(f2))
@@ -502,13 +507,4 @@ void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
 			f2.seekg(3, ios_base::cur); // skip " ` "
 		}
 	}
-}
-
-bool MyArray::IsFileEmpty(fstream& f) {
-	f.seekg(0, ios::beg);
-
-	if (f.peek() == EOF)
-		return true;
-
-	return false;
 }
