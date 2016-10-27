@@ -33,7 +33,7 @@ MyArray::~MyArray()
 
 void MyArray::SetArray() {
 	for (int i = 0; i < length; i++)
-		a[i] = rand() % 1000;
+		a[i] = rand() % 100;
 }
 
 void MyArray::SetArray(int arr[]) {
@@ -95,7 +95,7 @@ void MyArray::BubbleSort() {
 		}
 	}
 }
-void MyArray::InsertionSort() {
+void MyArray::InsertionSort() { // modify
 	for (int i = 1; i < length; i++) {
 		// If wrong order found
 		if (a[i] < a[i - 1]) {
@@ -116,24 +116,37 @@ void MyArray::InsertionSort() {
 		}
 	}
 }
-void MyArray::SelectionSort() { // modify
-	int minIndex;
+void MyArray::SelectionSort() { // modified
+	int minIndex, maxIndex;
+	int left, right;
 
-	for (int i = 0; i < length - 1; i++) {
-		minIndex = i;
+	for (left = 0, right = length - 1; left < right;) {
+		minIndex = maxIndex = left;
 
-		for (int j = i + 1; j < length; j++) {
-			if (a[j] < a[minIndex])
-				minIndex = j;
+		for (int i = left + 1; i < right + 1; i++) {
+			if (a[i] < a[minIndex])
+				minIndex = i;
+			if (a[i] > a[maxIndex])
+				maxIndex = i;
 		}
-
-		// if (the element that has een chosen in the very begining is already minimal)
+		// if (the element that has been chosen in the very begining is already minimal)
 		// the condition is written in order to not change the element with itself
-		if (minIndex != i) {
+		if (minIndex != left){
 			int tmp = a[minIndex];
-			a[minIndex] = a[i];
-			a[i] = tmp;
+			a[minIndex] = a[left];
+			a[left] = tmp;
+
+			if (maxIndex == left)
+				maxIndex = minIndex;
 		}
+		left++;
+
+		if (maxIndex != right) {
+			int tmp = a[maxIndex];
+			a[maxIndex] = a[right];
+			a[right] = tmp;
+		}
+		right--;
 	}
 }
 
@@ -412,7 +425,7 @@ void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
 				f2 >> current_f2;
 			}
 		}
-		
+
 		if (!written_f1) {
 			while (true) {
 				f << current_f1 << " ";

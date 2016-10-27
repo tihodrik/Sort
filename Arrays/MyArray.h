@@ -23,7 +23,7 @@ public:
 	void operator()(const MyArray& object);
 	
 	// Basic sorts
-	void SelectionSort();
+	void SelectionSort();	// modified
 	void InsertionSort();
 	void BubbleSort();
 
