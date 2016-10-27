@@ -323,6 +323,24 @@ void MyArray::CountSort() {
 }
 
 //External sort
+void MyArray::FillFile() {
+	fstream f("file.txt", ios::out);
+	if (!f.is_open())
+		throw "File not found";
+
+	for (int i = 0; i < length; i++)
+		f << a[i] << " ";
+	f.close();
+}
+void MyArray::GetFromFile() {
+	fstream f("file.txt", ios::in);
+	if (!f.is_open())
+		throw "File not found";
+
+	for (int i = 0; i < length; i++)
+		f >> a[i];
+	f.close();
+}
 bool MyArray::EndRange(fstream& stream) {
 	char symbol;
 	stream.seekg(1, ios_base::cur);
@@ -357,41 +375,46 @@ bool MyArray::IsFileEnd(fstream& f) {
 	return end;
 }
 
-
-void MyArray::MergeSort(string path_f) { // protection of not opened files
+void MyArray::MergeSort() {
 	int current, previous;
+	
+	enum files {
+		file,
+		file1,
+		file2
+	};
 
 	while (true) {
-		fstream f(path_f, ios::in);
+		fstream f("file.txt", ios::in);
 		fstream f1("file1.txt", ios::out, ios::trunc);
 		fstream f2("file2.txt", ios::out, ios::trunc);
 
-		map <string, fstream*> streams;
+		map <int, fstream*> streams;
+		streams.insert(make_pair(0, &f));
+		streams.insert(make_pair(1, &f1));
+		streams.insert(make_pair(2, &f2));
+		
 
-		streams.insert(make_pair("file", &f));
-		streams.insert(make_pair("file1", &f1));
-		streams.insert(make_pair("file2", &f2));
-
-		for each (pair<string, fstream*> st in streams) {
+		for each (pair<int, fstream*> st in streams) {
 			if (!(st.second->is_open()))
 				throw "Can't open a file";
 		}
 
-		string current_file = "file1";
+		files current_file = file1;
 
-		*streams["file"] >> previous;
+		*streams[0] >> previous;
 		*streams[current_file] << previous << " ";
 
-		while (!IsFileEnd(*streams["file"])) {
-			*streams["file"] >> current;
+		while (!IsFileEnd(*streams[0])) {
+			*streams[0] >> current;
 
 			if (current < previous) {
 				*streams[current_file] << "` ";
 
-				if (current_file == "file1")
-					current_file = "file2";
+				if (current_file == file1)
+					current_file = file2;
 				else
-					current_file = "file1";
+					current_file = file1;
 			}
 
 			*streams[current_file] << current << " ";
@@ -400,24 +423,24 @@ void MyArray::MergeSort(string path_f) { // protection of not opened files
 
 		*streams[current_file] << "` ";
 
-		streams["file"]->close();
-		streams["file1"]->close();
-		streams["file2"]->close();
+		streams[0]->close();
+		streams[1]->close();
+		streams[2]->close();
 
-		f2.open("file2.txt", ios::in);
-		if (IsFileEmpty(*streams["file2"])) {
-			f2.close();
+		streams[2]->open("file2.txt", ios::in);
+		if (IsFileEmpty(*streams[2])) {
+			streams[2]->close();
 			break;
 		}
 
-		f.open(path_f, ios::out);
-		f1.open("file1.txt", ios::in);
+		streams[0]->open("file.txt", ios::out);
+		streams[1]->open("file1.txt", ios::in);
 
 		MergeFiles(f, f1, f2);
 
-		streams["file"]->close();
-		streams["file1"]->close();
-		streams["file2"]->close();
+		streams[0]->close();
+		streams[1]->close();
+		streams[2]->close();
 	}
 	remove("file1.txt");
 	remove("file2.txt");

@@ -2,6 +2,7 @@
 #include "string"
 #include "fstream"
 #include "iostream"
+#include "map"
 
 using namespace std;
 class MyArray
@@ -38,11 +39,13 @@ public:
 	void CountSort();
 
 	// External sort
+	void FillFile();
+	void GetFromFile();
 	bool EndRange(fstream& stream);
 	bool IsFileEmpty(fstream& f);
 	bool IsFileEnd(fstream& f);
-
-	void MergeSort(string path_f);
+	
+	void MergeSort();
 	void MergeFiles(fstream& f, fstream& f1, fstream& f2);
 	
 

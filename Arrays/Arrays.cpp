@@ -15,7 +15,6 @@ void PrintMenu();
 void PrintArray(MyArray& a, char* text, char agreement);
 
 MyArray Create();
-long GetTime(clock_t);
 
 //—Œ–“»–Œ¬ »
 void SelectionWrapper(MyArray * array);
@@ -26,6 +25,7 @@ void ShellWrapper(MyArray * array);
 void CombWrapper(MyArray * array);
 void CountWrapper(MyArray * array);
 void QuickWrapper(MyArray * array);
+void MergeWrapper(MyArray * array);
 
 typedef void(*SORT)(MyArray*);
 bool silent_mode = false;
@@ -45,6 +45,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	sort.insert(make_pair(6, CombWrapper));
 	sort.insert(make_pair(7, QuickWrapper));
 	sort.insert(make_pair(8, CountWrapper));
+	sort.insert(make_pair(9, MergeWrapper));
 
 	while (true) {
 		PrintMenu();
@@ -52,7 +53,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		cout << "Answer: ";
 		cin >> answer;
 
-		if (answer > 0 && answer < 9){
+		if (answer > 0 && answer < 10){
 			MyArray B(A);
 			system("cls");
 
@@ -77,10 +78,6 @@ int _tmain(int argc, _TCHAR* argv[])
 			A(Create());
 		}
 	}
-
-	/*MyArray A(1);
-
-	A.MergeSort("file.txt");*/
 	return 0;
 }
 //cout << "\n\n";
@@ -102,7 +99,8 @@ void PrintMenu() {
 		<< "5 - ShellSort\n"
 		<< "6 - CombSort\n"
 		<< "7 - QuickSort\n"
-		<< "8 - CountSort\n\n"
+		<< "8 - CountSort\n"
+		<< "9 - MergeSort\n\n"
 
 		<< "10 - to renew array\n"
 		<< "0 - to exit\n\n";
@@ -146,9 +144,7 @@ MyArray Create() {
 
 	return array;
 }
-long GetTime(clock_t time) {
-	return clock() - time;
-}
+
 void PrintArray(MyArray& a, char* text, char agreement) {
 	fflush(stdin);
 
@@ -188,4 +184,18 @@ void CountWrapper(MyArray * array) {
 }
 void QuickWrapper(MyArray * array) {
 	array->QuickSort(0, array->GetLength() - 1);
+}
+void MergeWrapper(MyArray * array) {
+	try {
+		array->FillFile();
+	}
+	catch (char* message) {
+		cout << "Error\n"
+			 << message << "\n\n";
+		return;
+	}
+	array->MergeSort();
+
+	if (!silent_mode)
+		array->GetFromFile();
 }
