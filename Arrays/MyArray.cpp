@@ -531,3 +531,33 @@ void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
 		}
 	}
 }
+
+int MyArray::BinarySearch(int number) {
+	int left = 0, right = length - 1, middle;
+	
+	if (number < a[0] || number > a[length - 1]) {
+		return -1;
+	} else {
+		while (left < right) {
+			middle = (left + right) / 2;
+			if (number == a[middle])
+				return middle;
+
+			if (right - left == 1) {
+				if (right == number)
+					return right;
+				if (left == number)
+					return left;
+				return -1;
+			}
+
+			if (number < a[middle]){
+				right = middle;
+			}
+			else {
+				left = middle;
+			}
+		}
+		return -1;
+	}
+}

@@ -47,7 +47,15 @@ public:
 	
 	void MergeSort();
 	void MergeFiles(fstream& f, fstream& f1, fstream& f2);
-	
+
+	// Search in arrays
+	int BinarySearch(int number);
+
+	// Search in text
+	bool KnutMorrisPratt();
+
+	// Hashing
+	string OpenHash();
 
 private:
 	int* a;
