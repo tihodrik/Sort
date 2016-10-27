@@ -32,7 +32,7 @@ MyArray::~MyArray()
 }
 
 void MyArray::SetArray() {
-	srand(time(NULL));
+	//srand(time(NULL));
 	for (int i = 0; i < length; i++)
 		a[i] = rand() % 100;
 }
@@ -75,12 +75,48 @@ void MyArray::operator()(const MyArray& object) {
 
 // Basic sorts
 void MyArray::BubbleSort() {
-	for (int i = 0; i < length - 1; i++) {
-		for (int j = 0; j < length - i - 1; j++) {
-			if (a[j] > a[j + 1]){
-				int tmp = a[j];
-				a[j] = a[j + 1];
+	int index, indexTmp, tmp;
+	bool sorted = false;
+
+	for (int i = 0; !sorted && i < length / 2; i++) {
+		sorted = true;
+
+		// down-up
+		for (index = i + 1; index < length - i; index++) {
+			if (a[index] < a[index - 1]){
+				indexTmp = index - 1;
+				int j;
+
+				for (j = index; j < length - i; j++) {
+					if (a[j] > a[indexTmp])
+						break;
+				}
+					
+				tmp = a[indexTmp];
+				a[indexTmp] = a[j - 1];
+				a[j - 1] = tmp;
+
+				index = j - 1;
+				sorted = false;
+			}
+		}
+
+		// up-down
+		for (index -= 2; index > i && !sorted; index--) {
+			if (a[index] < a[index - 1]){
+				indexTmp = index;
+				int j;
+
+				for (j = index - 1; j > i - 1; j--) {
+					if (a[j] < a[indexTmp])
+						break;
+				}
+
+				tmp = a[indexTmp];
+				a[indexTmp] = a[j + 1];
 				a[j + 1] = tmp;
+
+				index = j + 1;
 			}
 		}
 	}
