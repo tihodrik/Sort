@@ -24,7 +24,7 @@ public:
 	
 	// Basic sorts
 	void SelectionSort();	// modified
-	void InsertionSort();
+	void InsertionSort();	// modified
 	void BubbleSort();
 
 	// Sorts, that are based on basic sorts

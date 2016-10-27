@@ -4,6 +4,7 @@
 #include "fstream"
 #include "iostream"
 #include "map"
+#include "time.h"
 
 using namespace std;
 
@@ -12,7 +13,6 @@ MyArray::MyArray(int length)
 	this->length = length;
 	a = new int[length];
 }
-
 MyArray::MyArray()
 {
 	length = 0;
@@ -32,10 +32,10 @@ MyArray::~MyArray()
 }
 
 void MyArray::SetArray() {
+	srand(time(NULL));
 	for (int i = 0; i < length; i++)
 		a[i] = rand() % 100;
 }
-
 void MyArray::SetArray(int arr[]) {
 	for (int i = 0; i < length; i++)
 		a[i] = arr[i];
@@ -61,19 +61,9 @@ int MyArray::GetMax() {
 	return max;
 }
 
-bool MyArray::IsFileEmpty(fstream& f) {
-	f.seekg(0, ios::beg);
-
-	if (f.peek() == EOF)
-		return true;
-
-	return false;
-}
-
 int& MyArray::operator[](int index) {
 	return a[index];
 }
-
 void MyArray::operator()(const MyArray& object) {
 	delete[] a;
 
@@ -95,7 +85,7 @@ void MyArray::BubbleSort() {
 		}
 	}
 }
-void MyArray::InsertionSort() { // modify
+void MyArray::InsertionSort() { // modified
 	for (int i = 1; i < length; i++) {
 		// If wrong order found
 		if (a[i] < a[i - 1]) {
@@ -103,16 +93,30 @@ void MyArray::InsertionSort() { // modify
 			// Write current element
 			int tmp = a[i];
 
-			// Search place to insert. Move all elemets to the right
-			int j = i - 1;
-			while (j >= 0 && a[j] >= tmp) {
-				a[j + 1] = a[j];
-				j--;
-			}
+			// Search place to insert (binary search) and insert element
+			if (a[0] > tmp) {
+				for (int j = i - 1; j >= 0; j--)
+					a[j + 1] = a[j];
 
-			// Insert curret element: a[j] < tmp,
-			// so insert tmp to (j+1)th position
-			a[j + 1] = tmp;
+				a[0] = tmp;
+			}
+			else {
+				int first = 0, last = i, mid;
+				while (first < last) {
+					mid = (first + last) / 2;
+					if (a[mid - 1] <= tmp && a[mid] > tmp)
+						break;
+					if (tmp < a[mid])
+						last = mid;
+					else
+						first = mid;
+				}
+
+				for (int j = i - 1; j >= mid; j--)
+					a[j+1] = a[j];
+
+				a[mid] = tmp;
+			}
 		}
 	}
 }
@@ -182,7 +186,6 @@ void MyArray::ShakerSort() { //modify
 		left++;
 	}
 }
-
 void MyArray::ShellSort() {
 	// step == number of groups
 	for (int step = length / 2; step > 0; step /= 2) {
@@ -206,7 +209,6 @@ void MyArray::ShellSort() {
 		}
 	}
 }
-
 void MyArray::CombSort() {
 	for (int step = int(length / 1.3); step > 0; step = int(step / 1.3)) {
 		if (step == 9 || step == 10)
@@ -466,3 +468,11 @@ void MyArray::MergeFiles(fstream& f, fstream& f1, fstream& f2) {
 	}
 }
 
+bool MyArray::IsFileEmpty(fstream& f) {
+	f.seekg(0, ios::beg);
+
+	if (f.peek() == EOF)
+		return true;
+
+	return false;
+}
