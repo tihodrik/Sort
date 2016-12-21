@@ -2,3 +2,11 @@
 !/Arrays/*.cpp
 !/Arrays/*.h
 !.gitignore
+!/TextSearch/TextSearch.sln
+!/TextSearch/TextSearch/Form1.cs
+!/TextSearch/TextSearch/Form1.Designer.cs
+!/TextSearch/TextSearch/KMP.cs
+!/TextSearch/TextSearch/Program.cs
+!/TextSearch/TextSearch/SearchAlgorithm.cs
+!/TextSearch/TextSearch/App.config
+!/TextSearch/TextSearch/TextSearch.csproj
