@@ -39,6 +39,7 @@
             // 
             // text
             // 
+            this.text.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.text.Location = new System.Drawing.Point(25, 49);
             this.text.Multiline = true;
             this.text.Name = "text";
@@ -47,9 +48,10 @@
             // 
             // str
             // 
+            this.str.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.str.Location = new System.Drawing.Point(25, 193);
             this.str.Name = "str";
-            this.str.Size = new System.Drawing.Size(273, 20);
+            this.str.Size = new System.Drawing.Size(273, 26);
             this.str.TabIndex = 1;
             // 
             // label1
@@ -74,7 +76,7 @@
             // 
             // button
             // 
-            this.button.Location = new System.Drawing.Point(304, 190);
+            this.button.Location = new System.Drawing.Point(304, 193);
             this.button.Name = "button";
             this.button.Size = new System.Drawing.Size(80, 25);
             this.button.TabIndex = 7;

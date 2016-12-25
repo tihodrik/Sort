@@ -59,7 +59,8 @@ namespace TextSearch
                 while (j > 0 && Text[i] != Str[j])
                 {
                     counter++;
-                    i = i - j + d[j-1] + 1;
+                    int shift = j - d[j - 1];
+                    i = i - j + shift;
                     j = 0;
                     if (Text.Length - i < Str.Length)
                     {
@@ -69,10 +70,10 @@ namespace TextSearch
                 i++;
                 j++;
 
-                if (j == Str.Length)
+                if (j == Str.Length){
                     res = i - j;
-                else
-                    res = -1;
+                    break;
+                }
             }
              return new StringBuilder().AppendFormat("Position: {0}, copmared: {1} times", res, counter); ;
         }
