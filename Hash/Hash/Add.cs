@@ -27,6 +27,8 @@ namespace Hash
         public Add()
         {
             NativeMethods.AllocConsole();
+            Console.ForegroundColor = ConsoleColor.Red;
+
             InitializeComponent();
             CreateResult();
         }
@@ -248,9 +250,7 @@ namespace Hash
                     i--;
                     removed = true;
 
-                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(exception.Message);
-                    Console.ResetColor();
                 }
             }
 
